@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebSettings;
 import android.webkit.WebViewClient;
+import android.webkit.WebChromeClient;
 
 public class MainActivity extends Activity {
 
@@ -19,6 +20,9 @@ public class MainActivity extends Activity {
         configuracoes.setDomStorageEnabled(true);
 
         navegador.setWebViewClient(new WebViewClient());
+
+        // Permite exibir a solicitação de senha
+        navegador.setWebChromeClient(new WebChromeClient());
 
         setContentView(navegador);
 
