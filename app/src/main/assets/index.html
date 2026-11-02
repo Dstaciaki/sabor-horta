@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#285b36">
+<title>Sabor & Horta</title>
+<style>
+:root{--green:#285b36;--light:#f3f7ef;--ink:#203126;--muted:#647268}
+*{box-sizing:border-box}body{margin:0;background:var(--light);color:var(--ink);font-family:Arial,sans-serif}
+header{background:var(--green);color:white;padding:18px 16px;position:sticky;top:0;z-index:5}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}h1{font-size:25px;margin:0}header p{margin:5px 0 0;font-size:13px;opacity:.9}
+button,input{font:inherit}button{border:0;border-radius:12px;padding:11px 14px;background:#e6efdf;color:var(--green);font-weight:bold}
+main{padding:16px;max-width:900px;margin:auto}.search{width:100%;padding:14px;border:1px solid #d2ddcf;border-radius:14px;background:white;font-size:16px;margin-bottom:12px}
+.filters{display:flex;gap:8px;overflow:auto;padding-bottom:12px}.filters button{white-space:nowrap}.filters button.active{background:var(--green);color:white}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.item{background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 9px #20312612;text-align:left;padding:0;color:var(--ink)}
+.item img{width:100%;height:130px;object-fit:cover;display:block;background:#e3eadf}.item strong{display:block;padding:10px 12px 3px;font-size:17px}.item small{display:block;padding:0 12px 12px;color:var(--muted)}
+.detail{background:white;border-radius:18px;overflow:hidden}.detail img{width:100%;height:220px;object-fit:cover}.detail .inside{padding:18px}.detail h2{margin:0 0 8px}.detail h3{font-size:16px;margin:18px 0 5px;color:var(--green)}.detail p{line-height:1.5;margin:5px 0}
+.hidden{display:none!important}.back{margin-bottom:12px;background:#dfeadd}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.item img{height:170px}}
+</style>
+</head>
+<body>
+<header><div class="top"><div><h1>ðŸ¥¬ Sabor &amp; Horta</h1><p>Escolha bem. Coma melhor.</p></div><button id="homeBtn" class="hidden">âŒ‚ InÃ­cio</button></div></header>
+<main>
+<section id="catalog">
+<input id="search" class="search" placeholder="Buscar fruta ou verdura..." aria-label="Buscar">
+<div class="filters" id="filters">
+<button class="active" data-cat="Todos">Todos</button><button data-cat="Frutas">Frutas</button><button data-cat="Verduras">Verduras</button><button data-cat="Legumes">Legumes</button>
+</div>
+<div class="grid" id="grid"></div>
+</section>
+<section id="detail" class="hidden"></section>
+</main>
+<footer>InformaÃ§Ãµes gerais: a Ã©poca de safra pode variar conforme a regiÃ£o e o clima.</footer>
+<script>
+const foods=[
+{name:"MaÃ§Ã£",cat:"Frutas",img:"https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=800",choose:"Prefira maÃ§Ã£s firmes, com casca Ã­ntegra e sem Ã¡reas amassadas.",season:"DisponÃ­vel o ano todo; a oferta e o preÃ§o variam conforme a regiÃ£o.",nutrition:"Fornece fibras, especialmente quando consumida com a casca, e compostos antioxidantes.",store:"Guarde na geladeira, em gaveta prÃ³pria, longe de frutas muito sensÃ­veis ao etileno."},
+{name:"Banana",cat:"Frutas",img:"https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=800",choose:"Escolha conforme o ponto de consumo: mais verdes para durar mais; amarelas para consumir logo.",season:"Encontrada durante todo o ano.",nutrition:"Fonte de carboidratos, potÃ¡ssio e vitamina B6.",store:"Deixe amadurecer em temperatura ambiente. Depois de madura, pode ir Ã  geladeira."},
+{name:"Laranja",cat:"Frutas",img:"https://images.unsplash.com/photo-1547514701-42782101795e?w=800",choose:"Prefira as mais pesadas para o tamanho, firmes e sem partes moles.",season:"A safra costuma variar por variedade e regiÃ£o; hÃ¡ oferta ampla ao longo do ano.",nutrition:"Rica em vitamina C e contÃ©m fibras, sobretudo quando consumida inteira.",store:"Mantenha em local fresco; para conservar por mais tempo, refrigere."},
+{name:"Morango",cat:"Frutas",img:"https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=800",choose:"Procure frutos firmes, vermelhos e secos, sem mofo ou machucados.",season:"Em muitas regiÃµes, a oferta aumenta nos meses mais frios e secos.",nutrition:"ContÃ©m vitamina C, fibras e compostos antioxidantes.",store:"Refrigere sem lavar, em recipiente ventilado. Lave apenas antes de consumir."},
+{name:"Abacate",cat:"Frutas",img:"https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=800",choose:"Ceda levemente Ã  pressÃ£o, sem afundar. Evite unidades com manchas profundas.",season:"A disponibilidade varia conforme a variedade e a regiÃ£o.",nutrition:"Fornece gorduras monoinsaturadas, fibras e potÃ¡ssio.",store:"Deixe amadurecer fora da geladeira; depois de maduro, refrigere."},
+{name:"MamÃ£o",cat:"Frutas",img:"https://images.unsplash.com/photo-1517282009859-f000ec3b26fe?w=800",choose:"Escolha casca amarelando e polpa que ceda levemente, sem Ã¡reas moles demais.",season:"DisponÃ­vel em boa parte do ano, dependendo da regiÃ£o.",nutrition:"Fonte de vitamina C, vitamina A e fibras.",store:"Deixe amadurecer em temperatura ambiente e refrigere quando estiver maduro."},
+{name:"Alface",cat:"Verduras",img:"https://images.unsplash.com/photo-1556801712-76c8eb07bbc9?w=800",choose:"Folhas viÃ§osas, crocantes e sem bordas escurecidas ou sinais de murcha.",season:"Cultivada o ano todo; temperaturas amenas favorecem muitas variedades.",nutrition:"Tem alto teor de Ã¡gua e fornece folato e vitamina K.",store:"Refrigere seca, em recipiente ou saco com papel absorvente."},
+{name:"Couve",cat:"Verduras",img:"https://images.unsplash.com/photo-1515543904379-3d757afe72e4?w=800",choose:"Prefira folhas firmes, verdes e sem furos excessivos ou amarelamento.",season:"Pode ser encontrada durante todo o ano.",nutrition:"ContÃ©m fibras, vitaminas A, C e K.",store:"Refrigere em saco ou pote fechado e consuma em poucos dias."},
+{name:"BrÃ³colis",cat:"Verduras",img:"https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=800",choose:"Escolha cabeÃ§as compactas, verde-escuras e com flores ainda fechadas.",season:"Geralmente se desenvolve melhor em clima ameno.",nutrition:"Fornece fibras, vitamina C, vitamina K e folato.",store:"Guarde refrigerado, sem lavar, em saco perfurado."},
+{name:"Cenoura",cat:"Legumes",img:"https://images.unsplash.com/photo-1445282768818-728615cc910a?w=800",choose:"Prefira cenouras firmes, lisas e sem rachaduras ou partes moles.",season:"DisponÃ­vel o ano todo, com variaÃ§Ãµes regionais de safra.",nutrition:"Rica em betacaroteno, que o organismo converte em vitamina A.",store:"Retire as folhas e refrigere em saco ou recipiente fechado."},
+{name:"Tomate",cat:"Legumes",img:"https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=800",choose:"Escolha tomates firmes, com cor uniforme e sem rachaduras ou machucados.",season:"HÃ¡ produÃ§Ã£o em diferentes Ã©pocas do ano, conforme regiÃ£o e cultivo.",nutrition:"ContÃ©m vitamina C, potÃ¡ssio e licopeno.",store:"Deixe amadurecer em temperatura ambiente; refrigere se estiver muito maduro."},
+{name:"Abobrinha",cat:"Legumes",img:"https://images.unsplash.com/photo-1563252722-6434563a985d?w=800",choose:"Prefira unidades firmes, com casca brilhante e sem partes amolecidas.",season:"A oferta costuma ser ampla, com variaÃ§Ãµes conforme clima e regiÃ£o.",nutrition:"Tem bastante Ã¡gua e fornece fibras e vitamina C.",store:"Refrigere em saco aberto ou perfurado e consuma em poucos dias."}
+];
+let category="Todos", idle;
+const grid=document.getElementById("grid"), catalog=document.getElementById("catalog"), detail=document.getElementById("detail"), homeBtn=document.getElementById("homeBtn");
+function render(){const q=document.getElementById("search").value.toLocaleLowerCase("pt-BR");grid.innerHTML="";foods.filter(f=>(category==="Todos"||f.cat===category)&&f.name.toLocaleLowerCase("pt-BR").includes(q)).forEach(f=>{const b=document.createElement("button");b.className="item";b.innerHTML=`<img loading="lazy" src="${f.img}" alt="${f.name}"><strong>${f.name}</strong><small>${f.cat} Â· Toque para saber mais</small>`;b.onclick=()=>show(f);grid.appendChild(b)})}
+function show(f){catalog.classList.add("hidden");detail.classList.remove("hidden");homeBtn.classList.remove("hidden");detail.innerHTML=`<button class="back" id="back">â† Voltar ao catÃ¡logo</button><article class="detail"><img src="${f.img}" alt="${f.name}"><div class="inside"><h2>${f.name}</h2><h3>Como escolher</h3><p>${f.choose}</p><h3>Safra e Ã©poca</h3><p>${f.season}</p><h3>NutriÃ§Ã£o</h3><p>${f.nutrition}</p><h3>Como conservar</h3><p>${f.store}</p></div></article>`;document.getElementById("back").onclick=home}
+function home(){detail.classList.add("hidden");catalog.classList.remove("hidden");homeBtn.classList.add("hidden");}
+document.getElementById("search").addEventListener("input",render);
+document.querySelectorAll(".filters button").forEach(b=>b.onclick=()=>{category=b.dataset.cat;document.querySelectorAll(".filters button").forEach(x=>x.classList.toggle("active",x===b));render()});
+homeBtn.onclick=home;
+function resetIdle(){clearTimeout(idle);idle=setTimeout(home,60000)}
+["click","touchstart","keydown","mousemove"].forEach(e=>document.addEventListener(e,resetIdle,{passive:true}));
+render();resetIdle();
+</script>
+</body>
+</html>
