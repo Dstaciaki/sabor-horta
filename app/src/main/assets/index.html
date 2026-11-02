@@ -6,37 +6,36 @@
 <meta name="theme-color" content="#285b36">
 <title>Sabor & Horta</title>
 <style>
-:root{--green:#285b36;--light:#f3f7ef;--ink:#203126;--muted:#647268}
+:root{--green:#285b36;--light:#f3f7ef;--ink:#203126;--muted:#647268;--line:#d6e0d2}
 *{box-sizing:border-box}body{margin:0;background:var(--light);color:var(--ink);font-family:Arial,sans-serif}
-header{background:var(--green);color:white;padding:18px 16px;position:sticky;top:0;z-index:5}
-.top{display:flex;align-items:center;justify-content:space-between;gap:10px}h1{font-size:25px;margin:0}header p{margin:5px 0 0;font-size:13px;opacity:.9}
-button,input{font:inherit}button{border:0;border-radius:12px;padding:11px 14px;background:#e6efdf;color:var(--green);font-weight:bold}
-main{padding:16px;max-width:900px;margin:auto}.search{width:100%;padding:14px;border:1px solid #d2ddcf;border-radius:14px;background:white;font-size:16px;margin-bottom:12px}
+header{background:var(--green);color:white;padding:16px;position:sticky;top:0;z-index:5}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}h1{font-size:24px;margin:0}header p{margin:5px 0 0;font-size:13px;opacity:.9}
+button,input,textarea,select{font:inherit}button{border:0;border-radius:11px;padding:11px 14px;background:#e6efdf;color:var(--green);font-weight:bold;cursor:pointer}
+main{padding:15px;max-width:900px;margin:auto}.search{width:100%;padding:14px;border:1px solid var(--line);border-radius:13px;background:white;font-size:16px;margin-bottom:12px}
 .filters{display:flex;gap:8px;overflow:auto;padding-bottom:12px}.filters button{white-space:nowrap}.filters button.active{background:var(--green);color:white}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.item{background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 9px #20312612;text-align:left;padding:0;color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.item{background:white;border-radius:15px;overflow:hidden;box-shadow:0 2px 9px #20312612;text-align:left;padding:0;color:var(--ink)}
 .item img{width:100%;height:130px;object-fit:cover;display:block;background:#e3eadf}.item strong{display:block;padding:10px 12px 3px;font-size:17px}.item small{display:block;padding:0 12px 12px;color:var(--muted)}
-.detail{background:white;border-radius:18px;overflow:hidden}.detail img{width:100%;height:220px;object-fit:cover}.detail .inside{padding:18px}.detail h2{margin:0 0 8px}.detail h3{font-size:16px;margin:18px 0 5px;color:var(--green)}.detail p{line-height:1.5;margin:5px 0}
+.detail{background:white;border-radius:18px;overflow:hidden}.detail img{width:100%;height:220px;object-fit:cover}.inside{padding:18px}.inside h2{margin:0 0 8px}.inside h3{font-size:16px;margin:18px 0 5px;color:var(--green)}.inside p{line-height:1.5;margin:5px 0}
 .hidden{display:none!important}.back{margin-bottom:12px;background:#dfeadd}
 footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+.admin-wrap{background:#fff;border-radius:16px;padding:16px}.admin-wrap h2{margin-top:0}.admin-form{display:grid;gap:10px}.admin-form label{font-weight:bold;font-size:14px;display:grid;gap:5px}.admin-form input,.admin-form textarea,.admin-form select{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px;background:#fff;color:var(--ink)}.admin-form textarea{min-height:70px;resize:vertical}.admin-actions{display:flex;gap:8px;flex-wrap:wrap}.primary{background:var(--green);color:white}.danger{background:#f8e5e2;color:#8a2b20}.admin-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.admin-row span{font-weight:bold}.hint{font-size:13px;color:var(--muted);line-height:1.45}.pill{font-size:12px;background:#edf3e9;border-radius:20px;padding:5px 9px}
 @media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.item img{height:170px}}
 </style>
 </head>
 <body>
-<header><div class="top"><div><h1>ðŸ¥¬ Sabor &amp; Horta</h1><p>Escolha bem. Coma melhor.</p></div><button id="homeBtn" class="hidden">âŒ‚ InÃ­cio</button></div></header>
+<header><div class="top"><div><h1>ðŸ¥¬ Sabor &amp; Horta</h1><p>Escolha bem. Coma melhor.</p></div><div class="admin-actions"><button id="adminBtn">âš™ AdministraÃ§Ã£o</button><button id="homeBtn" class="hidden">âŒ‚ InÃ­cio</button></div></div></header>
 <main>
 <section id="catalog">
 <input id="search" class="search" placeholder="Buscar fruta ou verdura..." aria-label="Buscar">
-<div class="filters" id="filters">
-<button class="active" data-cat="Todos">Todos</button><button data-cat="Frutas">Frutas</button><button data-cat="Verduras">Verduras</button><button data-cat="Legumes">Legumes</button>
-</div>
+<div class="filters" id="filters"><button class="active" data-cat="Todos">Todos</button><button data-cat="Frutas">Frutas</button><button data-cat="Verduras">Verduras</button><button data-cat="Legumes">Legumes</button></div>
 <div class="grid" id="grid"></div>
 </section>
 <section id="detail" class="hidden"></section>
+<section id="admin" class="hidden"></section>
 </main>
 <footer>InformaÃ§Ãµes gerais: a Ã©poca de safra pode variar conforme a regiÃ£o e o clima.</footer>
 <script>
-const foods=[
+const initialFoods=[
 {name:"MaÃ§Ã£",cat:"Frutas",img:"https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=800",choose:"Prefira maÃ§Ã£s firmes, com casca Ã­ntegra e sem Ã¡reas amassadas.",season:"DisponÃ­vel o ano todo; a oferta e o preÃ§o variam conforme a regiÃ£o.",nutrition:"Fornece fibras, especialmente quando consumida com a casca, e compostos antioxidantes.",store:"Guarde na geladeira, em gaveta prÃ³pria, longe de frutas muito sensÃ­veis ao etileno."},
 {name:"Banana",cat:"Frutas",img:"https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=800",choose:"Escolha conforme o ponto de consumo: mais verdes para durar mais; amarelas para consumir logo.",season:"Encontrada durante todo o ano.",nutrition:"Fonte de carboidratos, potÃ¡ssio e vitamina B6.",store:"Deixe amadurecer em temperatura ambiente. Depois de madura, pode ir Ã  geladeira."},
 {name:"Laranja",cat:"Frutas",img:"https://images.unsplash.com/photo-1547514701-42782101795e?w=800",choose:"Prefira as mais pesadas para o tamanho, firmes e sem partes moles.",season:"A safra costuma variar por variedade e regiÃ£o; hÃ¡ oferta ampla ao longo do ano.",nutrition:"Rica em vitamina C e contÃ©m fibras, sobretudo quando consumida inteira.",store:"Mantenha em local fresco; para conservar por mais tempo, refrigere."},
@@ -50,17 +49,33 @@ const foods=[
 {name:"Tomate",cat:"Legumes",img:"https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=800",choose:"Escolha tomates firmes, com cor uniforme e sem rachaduras ou machucados.",season:"HÃ¡ produÃ§Ã£o em diferentes Ã©pocas do ano, conforme regiÃ£o e cultivo.",nutrition:"ContÃ©m vitamina C, potÃ¡ssio e licopeno.",store:"Deixe amadurecer em temperatura ambiente; refrigere se estiver muito maduro."},
 {name:"Abobrinha",cat:"Legumes",img:"https://images.unsplash.com/photo-1563252722-6434563a985d?w=800",choose:"Prefira unidades firmes, com casca brilhante e sem partes amolecidas.",season:"A oferta costuma ser ampla, com variaÃ§Ãµes conforme clima e regiÃ£o.",nutrition:"Tem bastante Ã¡gua e fornece fibras e vitamina C.",store:"Refrigere em saco aberto ou perfurado e consuma em poucos dias."}
 ];
-let category="Todos", idle;
-const grid=document.getElementById("grid"), catalog=document.getElementById("catalog"), detail=document.getElementById("detail"), homeBtn=document.getElementById("homeBtn");
-function render(){const q=document.getElementById("search").value.toLocaleLowerCase("pt-BR");grid.innerHTML="";foods.filter(f=>(category==="Todos"||f.cat===category)&&f.name.toLocaleLowerCase("pt-BR").includes(q)).forEach(f=>{const b=document.createElement("button");b.className="item";b.innerHTML=`<img loading="lazy" src="${f.img}" alt="${f.name}"><strong>${f.name}</strong><small>${f.cat} Â· Toque para saber mais</small>`;b.onclick=()=>show(f);grid.appendChild(b)})}
-function show(f){catalog.classList.add("hidden");detail.classList.remove("hidden");homeBtn.classList.remove("hidden");detail.innerHTML=`<button class="back" id="back">â† Voltar ao catÃ¡logo</button><article class="detail"><img src="${f.img}" alt="${f.name}"><div class="inside"><h2>${f.name}</h2><h3>Como escolher</h3><p>${f.choose}</p><h3>Safra e Ã©poca</h3><p>${f.season}</p><h3>NutriÃ§Ã£o</h3><p>${f.nutrition}</p><h3>Como conservar</h3><p>${f.store}</p></div></article>`;document.getElementById("back").onclick=home}
-function home(){detail.classList.add("hidden");catalog.classList.remove("hidden");homeBtn.classList.add("hidden");}
+const STORAGE_KEY="saborHortaFoodsV1";
+let foods=loadFoods(),category="Todos",idleTimer,editingIndex=-1;
+function loadFoods(){try{const saved=localStorage.getItem(STORAGE_KEY);return saved?JSON.parse(saved):initialFoods.slice()}catch(e){return initialFoods.slice()}}
+function saveFoods(){localStorage.setItem(STORAGE_KEY,JSON.stringify(foods))}
+const grid=document.getElementById("grid"),catalog=document.getElementById("catalog"),detail=document.getElementById("detail"),admin=document.getElementById("admin"),homeBtn=document.getElementById("homeBtn"),adminBtn=document.getElementById("adminBtn");
+function render(){const q=document.getElementById("search").value.toLocaleLowerCase("pt-BR");grid.innerHTML="";foods.filter(f=>(category==="Todos"||f.cat===category)&&f.name.toLocaleLowerCase("pt-BR").includes(q)).forEach(f=>{const b=document.createElement("button");b.className="item";b.innerHTML=`<img loading="lazy" src="${safe(f.img)}" alt="${safe(f.name)}"><strong>${safe(f.name)}</strong><small>${safe(f.cat)} Â· Toque para saber mais</small>`;b.onclick=()=>show(f);grid.appendChild(b)})}
+function safe(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function show(f){catalog.classList.add("hidden");admin.classList.add("hidden");detail.classList.remove("hidden");homeBtn.classList.remove("hidden");adminBtn.classList.add("hidden");detail.innerHTML=`<button class="back" id="back">â† Voltar ao catÃ¡logo</button><article class="detail"><img src="${safe(f.img)}" alt="${safe(f.name)}"><div class="inside"><h2>${safe(f.name)}</h2><h3>Como escolher</h3><p>${safe(f.choose)}</p><h3>Safra e Ã©poca</h3><p>${safe(f.season)}</p><h3>NutriÃ§Ã£o</h3><p>${safe(f.nutrition)}</p><h3>Como conservar</h3><p>${safe(f.store)}</p></div></article>`;document.getElementById("back").onclick=home}
+function home(){detail.classList.add("hidden");admin.classList.add("hidden");catalog.classList.remove("hidden");homeBtn.classList.add("hidden");adminBtn.classList.remove("hidden");}
+function openAdmin(){const pin=prompt("Digite a senha da administraÃ§Ã£o:");if(pin===null)return;if(pin!=="2468"){alert("Senha incorreta.");return}catalog.classList.add("hidden");detail.classList.add("hidden");admin.classList.remove("hidden");homeBtn.classList.remove("hidden");adminBtn.classList.add("hidden");editingIndex=-1;renderAdmin()}
+function renderAdmin(){admin.innerHTML=`<div class="admin-wrap"><h2>âš™ AdministraÃ§Ã£o</h2><p class="hint">Cadastre, edite ou remova produtos. As alteraÃ§Ãµes ficam salvas neste aparelho.</p><div class="admin-actions"><button class="primary" id="newItem">ï¼‹ Novo produto</button><button id="exportData">Exportar backup</button><button id="importData">Importar backup</button></div><div id="editor" class="hidden"></div><h3>Produtos cadastrados (${foods.length})</h3><div id="adminList"></div><p class="hint">A senha inicial Ã© <b>2468</b>. Para trocar, edite a constante ADMIN_PIN no arquivo index.html antes de gerar o APK.</p></div>`;
+document.getElementById("newItem").onclick=()=>editItem(-1);
+document.getElementById("exportData").onclick=()=>{const blob=new Blob([JSON.stringify(foods,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="backup-sabor-horta.json";a.click();URL.revokeObjectURL(a.href)};
+document.getElementById("importData").onclick=()=>{const i=document.createElement("input");i.type="file";i.accept=".json,application/json";i.onchange=()=>{const r=new FileReader();r.onload=()=>{try{const v=JSON.parse(r.result);if(!Array.isArray(v))throw 0;foods=v;saveFoods();renderAdmin();alert("Backup importado.")}catch(e){alert("Arquivo de backup invÃ¡lido.")}};r.readAsText(i.files[0])};i.click()};
+const list=document.getElementById("adminList");foods.forEach((f,i)=>{const row=document.createElement("div");row.className="admin-row";row.innerHTML=`<span>${safe(f.name)} <small class="pill">${safe(f.cat)}</small></span><div class="admin-actions"><button data-edit="${i}">Editar</button><button class="danger" data-del="${i}">Excluir</button></div>`;list.appendChild(row)});
+list.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editItem(Number(b.dataset.edit)));
+list.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{const i=Number(b.dataset.del);if(confirm("Excluir "+foods[i].name+"?")){foods.splice(i,1);saveFoods();renderAdmin()}});
+}
+function editItem(i){editingIndex=i;const f=i<0?{name:"",cat:"Frutas",img:"",choose:"",season:"",nutrition:"",store:""}:foods[i];const ed=document.getElementById("editor");ed.classList.remove("hidden");ed.innerHTML=`<h3>${i<0?"Novo produto":"Editar produto"}</h3><form class="admin-form" id="productForm"><label>Nome<input name="name" required value="${safe(f.name)}"></label><label>Categoria<select name="cat"><option ${f.cat==="Frutas"?"selected":""}>Frutas</option><option ${f.cat==="Verduras"?"selected":""}>Verduras</option><option ${f.cat==="Legumes"?"selected":""}>Legumes</option></select></label><label>Link da foto (URL)<input name="img" type="url" placeholder="https://..." value="${safe(f.img)}"></label><label>Como escolher<textarea name="choose" required>${safe(f.choose)}</textarea></label><label>Safra e Ã©poca<textarea name="season">${safe(f.season)}</textarea></label><label>InformaÃ§Ãµes nutricionais<textarea name="nutrition">${safe(f.nutrition)}</textarea></label><label>Como conservar<textarea name="store">${safe(f.store)}</textarea></label><div class="admin-actions"><button class="primary" type="submit">Salvar produto</button><button type="button" id="cancelEdit">Cancelar</button></div></form>`;
+document.getElementById("cancelEdit").onclick=()=>{ed.classList.add("hidden")};
+document.getElementById("productForm").onsubmit=e=>{e.preventDefault();const data=Object.fromEntries(new FormData(e.target).entries());if(i<0)foods.push(data);else foods[i]=data;saveFoods();renderAdmin();render();alert("Produto salvo neste aparelho!")};
+}
 document.getElementById("search").addEventListener("input",render);
 document.querySelectorAll(".filters button").forEach(b=>b.onclick=()=>{category=b.dataset.cat;document.querySelectorAll(".filters button").forEach(x=>x.classList.toggle("active",x===b));render()});
-homeBtn.onclick=home;
-function resetIdle(){clearTimeout(idle);idle=setTimeout(home,60000)}
-["click","touchstart","keydown","mousemove"].forEach(e=>document.addEventListener(e,resetIdle,{passive:true}));
+homeBtn.onclick=home;adminBtn.onclick=openAdmin;
+function resetIdle(){clearTimeout(idleTimer);idleTimer=setTimeout(()=>{if(!admin.classList.contains("hidden"))return;home()},60000)}
+["click","touchstart","keydown"].forEach(e=>document.addEventListener(e,resetIdle,{passive:true}));
 render();resetIdle();
 </script>
-</body>
-</html>
+</body></html>
