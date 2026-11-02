@@ -1,0 +1,49 @@
+SABOR & HORTA — PROJETO ANDROID (VERSÃO 1.0.0)
+
+O QUE ESTA VERSÃO TEM
+- Projeto Android nativo com WebView, pronto para abrir no Android Studio.
+- Orientação vertical (retrato) e interface imersiva/tela cheia.
+- Botão Voltar do Android direciona para a tela inicial e não encerra o app.
+- Catálogo com 12 alimentos, busca, categorias e páginas de detalhes.
+- Retorno automático à tela inicial após 60 segundos sem interação.
+- Fotografias de frutas e hortaliças carregadas de URLs do Unsplash; requer internet. Se alguma imagem não carregar, o cartão mostra um emoji como alternativa.
+
+COMO GERAR O APK NO ANDROID STUDIO
+1. Instale o Android Studio em um computador.
+2. Extraia este ZIP.
+3. No Android Studio, escolha Open e selecione a pasta SaborEHorta (a pasta que contém settings.gradle).
+4. Aguarde a sincronização do Gradle e a instalação do Android SDK 35, se solicitado.
+5. Use Build > Build Bundle(s) / APK(s) > Build APK(s).
+6. O APK de teste normalmente ficará em app/build/outputs/apk/debug/app-debug.apk.
+7. Transfira o APK para o celular Android e autorize a instalação de apps desta origem, se o Android solicitar.
+
+TESTE EM CELULAR
+- O app abre em retrato e em tela cheia.
+- Toque em um alimento, espere 60 segundos sem tocar para testar o retorno automático.
+- O botão Início no rodapé e o botão Voltar do aparelho retornam ao catálogo.
+- Para o primeiro teste, mantenha ENABLE_LOCK_TASK = false em MainActivity.java.
+
+MODO QUIOSQUE E BLOQUEIO DE SAÍDA
+- O app já oculta as barras do sistema e não fecha quando o usuário aperta Voltar.
+- Isso não equivale a um bloqueio total: gestos do sistema, tela de recentes, reinicialização e configurações podem continuar acessíveis.
+- O Android exige provisionamento do equipamento como dispositivo dedicado/Device Owner e allowlisting do pacote para Lock Task Mode realmente impedir a saída.
+- A constante ENABLE_LOCK_TASK em MainActivity.java está false para não prender seu celular durante o teste. Para o totem, habilitar true somente depois de provisionar o aparelho como dispositivo dedicado e testar o procedimento de manutenção/saída administrativa.
+
+FOTOGRAFIAS E INTERNET
+- As fotos desta demonstração são servidas pelo Unsplash via internet e não estão empacotadas localmente. Isso mantém o APK leve, mas a primeira exibição exige conexão. Para uma implantação comercial estável, recomendamos licenciar e armazenar localmente as fotos definitivas dos alimentos.
+- Confirme os termos/licenças de cada fotografia escolhida antes de uso comercial em escala.
+
+DADOS DE CULTIVO
+- As datas exatas de plantio e colheita dependem do produtor e do lote. O app informa essa limitação e não inventa datas. Para mostrar datas reais na gôndola, integrar posteriormente dados do fornecedor, etiqueta ou rastreabilidade do lote.
+
+PERSONALIZAÇÃO
+- Os textos e dados ficam no arquivo app/src/main/assets/index.html, dentro do array `foods`.
+- As fotos estão no campo `img` de cada alimento.
+- O temporizador de 60 segundos está no JavaScript, em setTimeout(..., 60000).
+
+FONTES DE REFERÊNCIA PARA PADRÕES DE QUALIDADE
+- MAPA: https://www.gov.br/agricultura/pt-br/assuntos/inspecao/produtos-vegetal/legislacao-programas-nacionais-e-seguranca-dos-alimentos-1/legislacao/referencial-fotografico-para-os-produtos-horticolas
+- CEAGESP: https://ceagesp.gov.br/hortiescolha/padrao-minimo/
+
+AVISO
+Este pacote é o projeto-fonte Android, não um APK já compilado. A compilação precisa do Android Studio/SDK. Não foi possível compilar o APK neste ambiente porque não há Android SDK/Gradle instalados.
