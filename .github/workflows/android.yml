@@ -19,18 +19,23 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configurar Java 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Configurar Android SDK
-        uses: android-actions/setup-android@v3
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "$ANDROID_HOME/cmdline-tools/16.0/bin" >> $GITHUB_PATH
+          echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
 
-      - name: Instalar Android SDK 35
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+      - name: Aceitar licenças e instalar SDK
+        run: |
+          yes | sdkmanager --licenses || true
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
-      - name: Compilar APK de teste
+      - name: Compilar APK
         uses: gradle/gradle-build-action@v3
         with:
           gradle-version: '8.9'
@@ -39,7 +44,7 @@ jobs:
       - name: Disponibilizar APK para download
         uses: actions/upload-artifact@v4
         with:
-          name: sabor-horta-apk-debug
+          name: sabor-horta-apk
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
